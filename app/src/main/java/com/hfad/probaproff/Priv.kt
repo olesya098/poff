@@ -195,12 +195,13 @@ fun Priv(navController: NavController) {
                     contentColor = Color(android.graphics.Color.parseColor("#FDD9B5"))
                 ),
                 onClick = {
-                    if (pagerState.currentPage < slides.size - 1) {
-                        scope.launch {
-                            pagerState.scrollToPage(pagerState.currentPage + 1)
+                    // Обработчик клика на кнопку
+                    if (pagerState.currentPage < slides.size - 1) { // Проверяем, что текущая страница меньше последней
+                        scope.launch { // Запускаем новую сопрограмму в корутине
+                            pagerState.scrollToPage(pagerState.currentPage + 1) // Прокручиваем к следующей странице
                         }
-                    } else {
-                        navController.navigate("LOGIN_SCREEN")
+                    } else { // Если текущая страница - последняя
+                        navController.navigate("LOGIN_SCREEN") // Переходим к экрану логина
                     }
                 }
             ) {
