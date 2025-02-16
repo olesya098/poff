@@ -173,12 +173,14 @@ fun Priv(navController: NavController) {
                         Color.White
                     else
                         Color.White.copy(alpha = 0.3f)
+                    val width = if (pagerState.currentPage == iteration) 49.dp else 29.dp
+
                     Box(
                         modifier = Modifier
                             .padding(horizontal = 4.dp)
                             .clip(CircleShape)
                             .background(color)
-                            .size(width = 26.dp, height = 8.dp)
+                            .size(width = width, height = 6.dp)
                     )
                 }
             }

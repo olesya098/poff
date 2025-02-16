@@ -112,10 +112,16 @@ fun LoginScreen(navController: NavController) {
             )
 
             // Email Input
+            // Определяем функцию isValidEmail, которая принимает строку email и возвращает логическое значение (Boolean)
             fun isValidEmail(email: String): Boolean {
-                val pattern = """^[a-z0-9]+@[a-z0-9]+\.[a-z]{3,}$""".toRegex()
+                // Создаем регулярное выражение для проверки формата электронной почты
+                val pattern = """^[a-z0-9]+@gmail\.com$""".toRegex()
+                //Метод toRegex() в Kotlin используется для преобразования строкового представления регулярного выражения в объект типа Regex.
+                // Проверяем, соответствует ли введенный email заданному регулярному выражению
+                // Функция matches возвращает true, если строка соответствует регулярному выражению, и false в противном случае.
                 return pattern.matches(email)
             }
+
 
             Column(
 
@@ -203,39 +209,50 @@ fun LoginScreen(navController: NavController) {
 
             // Кнопка входа
             Button(
+                // Определяем действие при нажатии кнопки
                 onClick = {
+                    // Проверяем, является ли введенный email корректным
                     if (isValidEmail(email)) {
+                        // Если email корректный, переходим на экран "HOME"
                         navController.navigate("HOME")
                     } else {
+                        // Если email некорректный, устанавливаем сообщение об ошибке
                         errorMessage = "Некорректный формат email. Используйте только строчные буквы и цифры."
+                        // Показываем сообщение об ошибке
                         showError = true
                     }
                 },
+                // Модификаторы для изменения внешнего вида кнопки
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp)
-                    .height(54.dp),
+                    .fillMaxWidth() // Кнопка займет полную ширину родительского элемента
+                    .padding(top = 24.dp) // Устанавливаем отступ сверху в 24dp
+                    .height(54.dp), // Устанавливаем высоту кнопки в 54dp
+                // Устанавливаем цвет кнопки
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(android.graphics.Color.parseColor("#03A9F4"))
+                    containerColor = Color(android.graphics.Color.parseColor("#03A9F4")) // Устанавливаем фон кнопки цветом из шестнадцатеричного кода
                 ),
+                // Задаем форму кнопки с закругленными углами
                 shape = RoundedCornerShape(8.dp)
             ) {
+                // Текст внутри кнопки
                 Text(
-                    text = "Войти",
-                    color = Color.White,
-                    fontSize = 18.sp
+                    text = "Войти", // Текст отображаемый на кнопке
+                    color = Color.White, // Цвет текста - белый
+                    fontSize = 18.sp // Размер шрифта текста - 18sp
                 )
             }
 
-            // Диалоговое окно с ошибкой
+// Проверяем, требуется ли показать диалоговое окно с ошибкой
             if (showError) {
                 AlertDialog(
-                    onDismissRequest = { showError = false },
-                    title = { Text("Ошибка") },
-                    text = { Text(errorMessage) },
+                    // Действие при закрытии диалогового окна
+                    onDismissRequest = { showError = false }, // Устанавливаем showError в false при закрытии окна
+                    title = { Text("Ошибка") }, // Заголовок диалогового окна
+                    text = { Text(errorMessage) }, // Текст сообщения об ошибке
                     confirmButton = {
+                        // Кнопка для подтверждения в диалоговом окне
                         TextButton(onClick = { showError = false }) {
-                            Text("OK")
+                            Text("OK") // Текст кнопки - "OK"
                         }
                     }
                 )
@@ -268,11 +285,12 @@ fun LoginScreen(navController: NavController) {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview(){
-    ProbaProffTheme{
-       val navController = rememberNavController()
+fun LoginScreenPreview() {
+    ProbaProffTheme {
+        val navController = rememberNavController()
         LoginScreen(navController = navController)
 
     }

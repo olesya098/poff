@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.test.isSelected
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -59,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hfad.probaproff.ui.theme.Blue2
 import com.hfad.probaproff.ui.theme.ProbaProffTheme
 import com.hfad.probaproff.ui.theme.White20
 
@@ -349,6 +351,8 @@ fun Home(navController: NavController) {
 
 @Composable
 fun BoxScope.BottomNavigationBarWithBackground(navController: NavController) {
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -360,112 +364,137 @@ fun BoxScope.BottomNavigationBarWithBackground(navController: NavController) {
         Image(
             painter = painterResource(id = R.drawable.navigationbar),
             contentDescription = "Navigation background",
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
 
-        // Получаем текущий маршрут
-        val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-
-        // Навигационные элементы
-        Row(
+        // Навигационная панель с Material 3
+        androidx.compose.material3.NavigationBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Center),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+            containerColor = Color.Transparent,
+            tonalElevation = 10.dp
         ) {
-            NavigationItem(
-                icon = R.drawable.home_2,
-                contentDescription = "Home",
-                isSelected = currentRoute == "home",
-                onClick = { navController.navigate("HOME") }
-            )
-            NavigationItem(
-                icon = R.drawable.path,
-                contentDescription = "Favorites",
-                isSelected = currentRoute == "favorites",
-                onClick = { navController.navigate("FAVORITE") }
-            )
-            Box(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .size(40.dp)
-                    .background(
-                        Color(android.graphics.Color.parseColor("#03A9F4")),
-                        shape = CircleShape
+            NavigationBarItem(
+                icon = {
+                    Image(
+                        painter = painterResource(id = if (currentRoute == "home") R.drawable.home_2 else R.drawable.home),
+                        contentDescription = "Home",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(if (currentRoute == "home") Color.White else Color(0xFF9098B1))
                     )
-
-            ) {
-                NavigationItem(
-                    icon = R.drawable.bag2,
-                    contentDescription = "Cart",
-                    isSelected = currentRoute == "cart",
-                    onClick = { navController.navigate("BASKET") }
+                },
+                label = {  },
+                selected = currentRoute == "home",
+                onClick = { navController.navigate("HOME") },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+                    unselectedIconColor = Color(0xFF9098B1),
+                    selectedTextColor = Color.White,
+                    unselectedTextColor = Color(0xFF9098B1),
+                    indicatorColor = if (currentRoute == "home") Color(0xFF40BFFF) else Color.Transparent
                 )
-            }
-            NavigationItem(
-                icon = R.drawable.vector,
-                contentDescription = "Notifications",
-                isSelected = currentRoute == "notifications",
-                onClick = { navController.navigate("NOTIFICATIONS") }
             )
-            NavigationItem(
-                icon = R.drawable.frame,
-                contentDescription = "Profile",
-                isSelected = currentRoute == "profile",
-                onClick = { navController.navigate("PROFILE") }
+
+            NavigationBarItem(
+                icon = {
+                    Image(
+                        painter = painterResource(id = if (currentRoute == "favorites") R.drawable.icon else R.drawable.path),
+                        contentDescription = "Favorites",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(if (currentRoute == "favorites") Color.White else Color(0xFF9098B1))
+                    )
+                },
+                label = { },
+                selected = currentRoute == "favorites",
+                onClick = { navController.navigate("FAVORITE") },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+                    unselectedIconColor = Color(0xFF9098B1),
+                    selectedTextColor = Color.White,
+                    unselectedTextColor = Color(0xFF9098B1),
+                    indicatorColor = if (currentRoute == "favorites") Color(0xFF40BFFF) else Color.Transparent
+                )
+            )
+
+            // Специальный элемент корзины с круглым фоном
+            NavigationBarItem(
+                icon = {
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(40.dp)
+                            .background(
+                                Color(android.graphics.Color.parseColor("#03A9F4")),
+                                shape = CircleShape
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.bag2),
+                            contentDescription = "Cart",
+                            modifier = Modifier.size(24.dp),
+                            colorFilter = ColorFilter.tint(if (currentRoute == "cart") Color.White else Color.White)
+                        )
+                    }
+                },
+                label = {  },
+                selected = currentRoute == "cart",
+                onClick = { navController.navigate("BASKET") },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+                    unselectedIconColor = Color.White,
+                    selectedTextColor = Color.White,
+                    unselectedTextColor = Color(0xFF9098B1),
+                    indicatorColor = Color.Transparent
+                )
+            )
+
+            NavigationBarItem(
+                icon = {
+                    Image(
+                        painter = painterResource(id = if (currentRoute == "notifications") R.drawable.notif else R.drawable.vector),
+                        contentDescription = "Notifications",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(if (currentRoute == "notifications") Color.White else Color(0xFF9098B1))
+                    )
+                },
+                label = {  },
+                selected = currentRoute == "notifications",
+                onClick = { navController.navigate("NOTIFICATIONS") },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+                    unselectedIconColor = Color(0xFF9098B1),
+                    selectedTextColor = Color.White,
+                    unselectedTextColor = Color(0xFF9098B1),
+                    indicatorColor = if (currentRoute == "notifications") Color(0xFF40BFFF) else Color.Transparent
+                )
+            )
+
+            NavigationBarItem(
+                icon = {
+                    Image(
+                        painter = painterResource(id = if (currentRoute == "profile") R.drawable.frame2 else R.drawable.frame),
+                        contentDescription = "Profile",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(if (currentRoute == "profile") Color.White else Color(0xFF9098B1))
+                    )
+                },
+                label = { },
+                selected = currentRoute == "profile",
+                onClick = { navController.navigate("PROFILE") },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+                    unselectedIconColor = Color(0xFF9098B1),
+                    selectedTextColor = Color.White,
+                    unselectedTextColor = Color(0xFF9098B1),
+                    indicatorColor = if (currentRoute == "profile") Color(0xFF40BFFF) else Color.Transparent
+                )
             )
         }
     }
 }
-
-@Composable
-fun NavigationItem(
-    icon: Int,
-    contentDescription: String,
-    isSelected: Boolean = false,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(48.dp)
-            .then(
-                if (isSelected) {
-                    Modifier
-                        .background(
-                            color = Color(0xFF40BFFF),
-                            shape = CircleShape
-                        )
-                        .shadow(
-                            elevation = 8.dp,
-                            shape = CircleShape,
-                        )
-                } else {
-                    Modifier
-                }
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        IconButton(
-            onClick = onClick,
-            modifier = Modifier.size(48.dp)
-        ) {
-            Image(
-                painter = painterResource(id = icon),
-                contentDescription = contentDescription,
-                modifier = Modifier.size(24.dp),
-                colorFilter = if (isSelected) {
-                    ColorFilter.tint(Color.White)
-                } else {
-                    ColorFilter.tint(Color(0xFF9098B1))
-                }
-            )
-        }
-    }
-}
-
 @Composable
 fun ListRow(
     model: CategoryList,
