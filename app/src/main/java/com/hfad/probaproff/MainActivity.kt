@@ -1,6 +1,7 @@
 package com.hfad.probaproff
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,9 +23,14 @@ import com.hfad.probaproff.ui.theme.ProbaProffTheme
 class MainActivity : ComponentActivity() {
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
         enableEdgeToEdge()
+
         setContent {
             ProbaProffTheme {
                 val navController = rememberNavController()
@@ -79,9 +86,10 @@ class MainActivity : ComponentActivity() {
                 composable(route = "POISK") {
                     Poisk(navController)
                 }
-                composable(route = "POISK") {
+                composable(route = "PROFIL") {
                     Profil(navController)
                 }
+
             }
         }
     }

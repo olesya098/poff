@@ -3,17 +3,7 @@ package com.hfad.probaproff
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -78,11 +68,11 @@ fun Priv(navController: NavController) {
             buttonText = "Начать"
         )
     )
-
-// Создание состояния для управления пейджером
+    // Состояние для управления страницами слайдера
     val pagerState = rememberPagerState(pageCount = { slides.size })
-    // Создание области корутин для анимированной прокрутки
-    val coroutineScope = rememberCoroutineScope()
+    // Скоуп для управления корутины
+    val scope = rememberCoroutineScope()
+
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -93,17 +83,20 @@ fun Priv(navController: NavController) {
                 .fillMaxSize()
                 .padding(top = 70.dp)
         ) {
+            // HorizontalPager для реализации горизонтального слайдера
             HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.weight(1f)
+                state = pagerState, // Подключаем состояние слайдера
+                modifier = Modifier.weight(1f) // Занимаем оставшуюся высоту
             ) { page ->
+                // Получаем текущий слайд в зависимости от номера страницы
                 val slide = slides[page]
+                // Внутренний контейнер для каждого слайда
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth() // Занимаем всю ширину
                 ) {
-                    if (page == 0) {
-                        // Для первого слайда текст остается сверху
+                    if (page == 0) { // Если это первый слайд
+                        // Отображаем заголовок 1
                         Text(
                             text = slide.title1,
                             fontSize = 32.sp,
@@ -125,7 +118,6 @@ fun Priv(navController: NavController) {
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(8.dp)
                         )
-
                         Image(
                             painter = painterResource(id = slide.image),
                             contentDescription = null,
@@ -135,7 +127,6 @@ fun Priv(navController: NavController) {
                                 .padding(top = 16.dp)
                         )
                     } else {
-                        // Для второго и третьего слайда картинка сверху, текст снизу
                         Image(
                             painter = painterResource(id = slide.image),
                             contentDescription = null,
@@ -144,7 +135,6 @@ fun Priv(navController: NavController) {
                                 .height(300.dp)
                                 .padding(top = 16.dp)
                         )
-
                         Text(
                             text = slide.title1,
                             fontSize = 32.sp,
@@ -170,10 +160,8 @@ fun Priv(navController: NavController) {
                 }
             }
 
-
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Индикаторы текущего слайда (точки внизу)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -197,7 +185,6 @@ fun Priv(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Кнопка
             Button(
                 modifier = Modifier
                     .padding(bottom = 62.dp)
@@ -209,8 +196,8 @@ fun Priv(navController: NavController) {
                 ),
                 onClick = {
                     if (pagerState.currentPage < slides.size - 1) {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        scope.launch {
+                            pagerState.scrollToPage(pagerState.currentPage + 1)
                         }
                     } else {
                         navController.navigate("LOGIN_SCREEN")

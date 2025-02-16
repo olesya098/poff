@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation ("com.google.android.material:material:1.6.0")
     implementation ("com.google.accompanist:accompanist-pager:0.28.0")
     implementation ("androidx.navigation:navigation-compose:2.5.3")
     androidTestImplementation(libs.androidx.junit)
